@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# generate.sh
+# audits and writes the objects
+
 set -x
 
 REGIONS=(
