@@ -1,0 +1,44 @@
+name: dumper
+
+on:
+  schedule:
+    - cron: "0 12 * * 6"
+  push:
+    paths:
+      - generate.sh
+      - .github/workflows/dumper.yml
+
+jobs:
+  dumper:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+      - name: configure system
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          gh auth login --with-token < <(echo ${{ secrets.GITHUB_TOKEN }})
+          gh auth status
+      - name: produce tag dump
+        run: |
+          ./generate.sh
+      - name: commit and push if there are changes
+        run: |
+          if { git ls-files --others --exclude-standard ; git diff-index --name-only --diff-filter=d HEAD ; } | grep --regexp='[.]csv$'; then
+              echo changes detected
+            else
+              exit 0
+          fi
+          TIMESTAMP="$(git log -n1 --pretty='format:%cd' --date=format:'%Y-%m-%d-%H-%M')"
+          NEW_BRANCH=audit-update-for-${TIMESTAMP}"
+          git add ./data/k8s-gcr-io.csv
+          git branch "${NEW_BRANCH}"
+          git checkout "${NEW_BRANCH}"
+          git commit -s -m "update registry.k8s.io objects dump for ${TIMESTAMP}"
+          git push origin "${NEW_BRANCH}"
+          gh pr create --title "Update registry.k8s.io objects dump ${TIMESTAMP}" --body "updates to registry.k8s.io objects dump for ${TIMESTAMP}"
+          gh pr merge --merge --auto "${NEW_BRANCH}"
