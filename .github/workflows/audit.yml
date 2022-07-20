@@ -23,6 +23,7 @@ jobs:
           git config user.email 'github-actions[bot]@users.noreply.github.com'
           gh auth login --with-token < <(echo ${{ secrets.GITHUB_TOKEN }})
           gh auth status
+          aws configure set region 'ap-southeast-2'
       - name: produce tag dump
         run: |
           ./generate.sh
