@@ -36,7 +36,7 @@ jobs:
           fi
           TIMESTAMP="$(git log -n1 --pretty='format:%cd' --date=format:'%Y-%m-%d-%H-%M')"
           NEW_BRANCH=audit-update-for-${TIMESTAMP}"
-          git add ./data/k8s-gcr-io.csv
+          git add ./data/*
           git branch "${NEW_BRANCH}"
           git checkout "${NEW_BRANCH}"
           git commit -s -m "update registry.k8s.io objects dump for ${TIMESTAMP}"
