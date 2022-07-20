@@ -6,7 +6,7 @@ on:
   push:
     paths:
       - generate.sh
-      - .github/workflows/dumper.yml
+      - .github/workflows/audit.yml
 
 jobs:
   dumper:
