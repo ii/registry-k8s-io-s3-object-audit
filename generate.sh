@@ -22,5 +22,5 @@ REGIONS=(
 mkdir -p ./data
 
 for REGION in "${REGIONS[@]}"; do
-  aws s3api list-objects --bucket "prod-registry-k8s-io-$REGION" --no-sign-request --output json > "./data/bucket-$REGION.json"
+  docker run --rm -it amazon/aws-cli:2.7.17 s3api list-objects --bucket "prod-registry-k8s-io-$REGION" --no-sign-request --output json > "./data/bucket-$REGION.json"
 done
