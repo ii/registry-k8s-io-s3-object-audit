@@ -35,7 +35,7 @@ jobs:
               exit 0
           fi
           TIMESTAMP="$(git log -n1 --pretty='format:%cd' --date=format:'%Y-%m-%d-%H-%M')"
-          NEW_BRANCH=audit-update-for-${TIMESTAMP}"
+          NEW_BRANCH="audit-update-for-${TIMESTAMP}"
           git add ./data/*
           git branch "${NEW_BRANCH}"
           git checkout "${NEW_BRANCH}"
