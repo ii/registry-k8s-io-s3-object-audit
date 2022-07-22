@@ -30,6 +30,7 @@ jobs:
           ./generate.sh
       - name: commit and push if there are changes
         run: |
+          set -x
           if { git ls-files --others --exclude-standard ; git diff-index --name-only --diff-filter=d HEAD ; } | grep --regexp='data/.*[.]json$'; then
               echo changes detected
             else
