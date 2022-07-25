@@ -8,7 +8,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if git diff-index --name-only --diff-filter=d HEAD | grep --regexp='data/.*[.]json$'; then
+if git status --porcelain | grep --regexp='data/.*[.]json$'; then
     echo changes detected
 else
     exit 0
