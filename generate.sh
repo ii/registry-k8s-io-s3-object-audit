@@ -4,6 +4,9 @@
 # audits and writes the objects
 
 set -x
+set -o errexit
+set -o nounset
+set -o pipefail
 
 REGIONS=(
     ap-northeast-1
