@@ -8,14 +8,14 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-if { git ls-files --others --exclude-standard ; git diff-index --name-only --diff-filter=d HEAD ; } | grep --regexp='data/.*[.]json$'; then
+if git diff-index --name-only --diff-filter=d HEAD | grep --regexp='data/.*[.]json$'; then
     echo changes detected
 else
     exit 0
 fi
 TIMESTAMP="$(git log -n1 --pretty='format:%cd' --date=format:'%Y-%m-%d-%H-%M')"
 NEW_BRANCH="audit-update-for-${TIMESTAMP}"
-git add ./data/*
+git add ./data/*.json
 git branch "${NEW_BRANCH}"
 git checkout "${NEW_BRANCH}"
 git commit -s -m "update registry.k8s.io objects dump for ${TIMESTAMP}"
